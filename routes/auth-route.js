@@ -3,9 +3,13 @@ const router = express.Router();
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const {check, validationResult} = require('express-validator');
-
+require('dotenv').config({
+    path:'../index.env'
+})
 const User = require('../models/user')
-
+router.get('/register', (req, res) => {
+    res.render('register')
+})
 
 router.post('/register', [
     check('name', "Name is required").not().isEmpty(),
@@ -45,6 +49,7 @@ router.post('/register', [
         user.password = await bcrypt.hash(password, salt)
         //save user in database
         await user.save();
+        //payload to generate token
         const payload = {
             user: {
                 id: user.id
@@ -52,8 +57,8 @@ router.post('/register', [
         }
 
         jwt.sign(
-            payload,
-            process.env.JWT_SECRET, {
+            payload, //for jwt token we need the private key as a random string
+            "asdfghjk", { 
                 expiresIn:36000
             }, (err, token) => {
                 if(err) throw err
@@ -62,10 +67,10 @@ router.post('/register', [
         )
 
     } catch (error){
-        console.log(err.message)
+        //console.log(err.message)
         res.status('500').send('server error')
     }
 })
 
 
-module.exports = router
+module.exports= router

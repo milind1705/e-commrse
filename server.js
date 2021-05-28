@@ -1,19 +1,22 @@
 const express = require ('express');
-const mongoose = require ('mongoose');
-const router = require('./routes/routes')
+const router = require('./routes/auth-route')
+const router1 = require('./routes/routes')
 const PORT = 3000;
-
-mongoose.connect('mongodb://localhost:27017/ecom',{
-    useCreateIndex:true,
-    useUnifiedTopology: true,
-    useNewUrlParser:true
+const connectDb = require('./models/connection')
+require('dotenv').config({
+    path:'./index.env'
 })
-console.log('connected to mpngo db')
+
+
 const app = express();
+connectDb();
+app.use(express.json());
+app.use(express.urlencoded({ extended: false}))
+app.set('view engine', 'ejs')
 
 //routes
-app.use('api/user/', require('./routes/auth-route'))
-app.use('/admin/',router)
+app.use('/api/user/', router)
+app.use('/admin/',router1)
 
 app.listen(PORT, (req, res) => {
     console.log(`server is running at port ${PORT}`)   

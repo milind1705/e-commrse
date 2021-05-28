@@ -6,7 +6,7 @@ router.use((req, res, next) => {
 })
 
 router.get('/', (req, res) => {
-    res.send ('hello world')
+    res.send ('simple')
 })
 
 
