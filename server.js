@@ -3,9 +3,7 @@ const router = require('./routes/auth-route')
 const router1 = require('./routes/routes')
 const PORT = 3000;
 const connectDb = require('./models/connection')
-require('dotenv').config({
-    path:'./index.env'
-})
+require('dotenv').config()
 
 
 const app = express();
